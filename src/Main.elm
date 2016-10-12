@@ -1,5 +1,6 @@
 module Main exposing (..)
 
+import Fragments
 import Html exposing (..)
 import Html.App as Html
 import Html.Events exposing (..)
@@ -62,7 +63,7 @@ update msg model =
             ( model, generateRandomName )
 
         OnResult newName ->
-            ( newName, Cmd.none )
+            newName ! []
 
 
 generateRandomName : Cmd Msg
@@ -81,28 +82,13 @@ generateRandomName =
 
         pickFragments : Int -> Int -> Int -> String
         pickFragments a b c =
-            (pickFragment beginning a)
-                ++ (pickFragment middle b)
-                ++ (pickFragment last c)
+            (pickFragment Fragments.beginning a)
+                ++ (pickFragment Fragments.middle b)
+                ++ (pickFragment Fragments.last c)
     in
         generate OnResult
             (Random.map3 pickFragments
-                (generator beginning)
-                (generator middle)
-                (generator last)
+                (generator Fragments.beginning)
+                (generator Fragments.middle)
+                (generator Fragments.last)
             )
-
-
-beginning : List String
-beginning =
-    [ "A", "Be", "De", "El", "Fa", "Jo", "Ki", "La", "Ma", "Na", "O", "Pa", "Re", "Si", "Ta", "Va" ]
-
-
-middle : List String
-middle =
-    [ "bar", "ched", "dell", "far" ]
-
-
-last : List String
-last =
-    [ "a", "ac", "ai", "al", "am", "an", "ar", "ea", "el", "er", "ess", "elt", "ic", "id", "il", "in", "is", "of", "us" ]
