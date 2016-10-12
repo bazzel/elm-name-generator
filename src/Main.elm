@@ -9,14 +9,38 @@ import Random exposing (generate)
 import Array
 
 
+--MAIN
+
+
 main : Program Never
 main =
     Html.program
         { view = view
         , update = update
         , init = ( "", generateRandomName )
-        , subscriptions = subscriptions
+        , subscriptions = \_ -> Sub.none
         }
+
+
+
+--MODEL
+
+
+type alias Model =
+    String
+
+
+
+--MESSAGES
+
+
+type Msg
+    = Generate
+    | OnResult String
+
+
+
+--VIEW
 
 
 view : Model -> Html Msg
@@ -27,13 +51,8 @@ view model =
         ]
 
 
-type Msg
-    = Generate
-    | OnResult String
 
-
-type alias Model =
-    String
+--UPDATE
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -72,11 +91,6 @@ generateRandomName =
                 (generator middle)
                 (generator last)
             )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
 
 
 beginning : List String
