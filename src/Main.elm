@@ -1,13 +1,34 @@
 module Main exposing (..)
 
 import Html exposing (text, Html)
+import Html.App as Html
 import List
 import Maybe
 
 
-main : Html msg
 main =
+    Html.program
+        { view = view
+        , update = update
+        , init = init
+        , subscriptions = subscriptions
+        }
+
+
+view model =
     text (randomString beginning ++ randomString middle ++ randomString last)
+
+
+update model =
+    model
+
+
+init =
+    ( "", Cmd.none )
+
+
+subscriptions model =
+    Sub.none
 
 
 randomString : List String -> String
