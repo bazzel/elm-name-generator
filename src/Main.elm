@@ -49,15 +49,18 @@ update msg model =
 generateRandomName : Cmd Msg
 generateRandomName =
     let
+        generator : List String -> Random.Generator Int
         generator list =
             Random.int 0 (List.length list - 1)
 
+        pickFragment : List String -> Int -> String
         pickFragment list i =
             list
                 |> Array.fromList
                 |> Array.get i
                 |> Maybe.withDefault ""
 
+        pickFragments : Int -> Int -> Int -> String
         pickFragments a b c =
             (pickFragment beginning a)
                 ++ (pickFragment middle b)
