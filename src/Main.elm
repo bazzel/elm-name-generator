@@ -1,48 +1,79 @@
 module Main exposing (..)
 
-import Html exposing (text, Html)
+import Html exposing (..)
 import Html.App as Html
+import Html.Events exposing (..)
 import List
 import Maybe
+import Random exposing (generate)
+import Array
 
 
+main : Program Never
 main =
     Html.program
         { view = view
         , update = update
-        , init = init
+        , init = ( { name = "" }, generateRandomName )
         , subscriptions = subscriptions
         }
 
 
+view : Model -> Html Msg
 view model =
-    text (randomString beginning ++ randomString middle ++ randomString last)
+    div []
+        [ div [] [ text (model.name) ]
+        , button [ onClick Generate ] [ text "Generate new name" ]
+        ]
 
 
-update model =
-    model
+type Msg
+    = Generate
+    | OnResult String
 
 
-init =
-    ( "", Cmd.none )
+type alias Model =
+    { name : String }
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        Generate ->
+            ( model, generateRandomName )
+
+        OnResult str ->
+            ( { model | name = str }, Cmd.none )
+
+
+generateRandomName : Cmd Msg
+generateRandomName =
+    let
+        generator list =
+            Random.int 0 (List.length list - 1)
+
+        pickFragment list i =
+            list
+                |> Array.fromList
+                |> Array.get i
+                |> Maybe.withDefault ""
+
+        pickFragments a b c =
+            (pickFragment beginning a)
+                ++ (pickFragment middle b)
+                ++ (pickFragment last c)
+    in
+        generate OnResult
+            (Random.map3 pickFragments
+                (generator beginning)
+                (generator middle)
+                (generator last)
+            )
+
+
+subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
-
-
-randomString : List String -> String
-randomString list =
-    let
-        y =
-            List.head list
-    in
-        case y of
-            Just string ->
-                string
-
-            Nothing ->
-                ""
 
 
 beginning : List String
