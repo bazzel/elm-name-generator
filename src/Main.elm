@@ -14,7 +14,7 @@ main =
     Html.program
         { view = view
         , update = update
-        , init = ( { name = "" }, generateRandomName )
+        , init = ( "", generateRandomName )
         , subscriptions = subscriptions
         }
 
@@ -22,7 +22,7 @@ main =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [] [ text (model.name) ]
+        [ div [] [ text (model) ]
         , button [ onClick Generate ] [ text "Generate new name" ]
         ]
 
@@ -33,7 +33,7 @@ type Msg
 
 
 type alias Model =
-    { name : String }
+    String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -42,8 +42,8 @@ update msg model =
         Generate ->
             ( model, generateRandomName )
 
-        OnResult str ->
-            ( { model | name = str }, Cmd.none )
+        OnResult newName ->
+            ( newName, Cmd.none )
 
 
 generateRandomName : Cmd Msg
