@@ -3,6 +3,7 @@ module Main exposing (..)
 import Fragments
 import Html exposing (..)
 import Html.App as Html
+import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import List
 import Maybe
@@ -47,8 +48,8 @@ type Msg
 view : Model -> Html Msg
 view model =
     div []
-        [ div [] [ text (model) ]
-        , button [ onClick Generate ] [ text "Generate new name" ]
+        [ div [] [ h3 [] [ text (model) ] ]
+        , button [ class "btn", onClick Generate ] [ span [] [ text "Generate new name" ] ]
         ]
 
 
